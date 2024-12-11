@@ -41,7 +41,7 @@ function mover(event){
         y = y - 5;
     }
     shante.style.top = y - "px";
-    
+    // se ha modificado
 }
 
 
