@@ -19,3 +19,10 @@ html, body{
     top: 0px;
     left: 0px;
 }
+
+#cohete{
+    width: 7rem;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}

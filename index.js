@@ -1,48 +1,78 @@
-let shante = document.getElementById("shante");
-let animacion = setInterval(cambiar_imagen,50);
-let num_imagen = 0;
+const shante = document.getElementById("shante");
+let animacion_shante = setInterval(cambiar_imagen_shante, 50);
+let num_imagen_shante = 0;
 let x = 0;
+let y = 0;
 
-function cambiar_imagen(){
-    num_imagen = num_imagen + 1;
-    let direc;
-    if (num_imagen > 15){
-        num_imagen = 1;
+const pantalla_ancho = window.innerWidth;
+const pantalla_alto = window.innerHeight;
+const shante_ancho = shante.offsetWidth;
+const shante_alto = shante.offsetHeight;
+
+function cambiar_imagen_shante() {
+    num_imagen_shante++;
+    let direc_shante;
+    if (num_imagen_shante > 15) {
+        num_imagen_shante = 1;
     }
-    direc = "img/shante/Shante_"+num_imagen+".png";
-    shante.setAttribute("src",direc)
+    direc_shante = "img/shante/Shante_" + num_imagen_shante + ".png";
+    shante.setAttribute("src", direc_shante)
 }
 
-document.addEventListener("keydown", mover);
+document.addEventListener("keydown", moverShante);
 
-function mover(event){
-    console.log(event.keyCode);
+function moverShante(event) {
+    let shante_x = x;
+    let shante_y = y;
 
-    if (event.keyCode == 68){
-        console.log("Me moveré 5 pixeles a la derecha")
-        x = x + 5;
+    switch (event.keyCode) {
+        case 68: shante_x = x + 5; break;
+        case 65: shante_x = x - 5; break;
+        case 83: shante_y = y + 5; break;
+        case 87: shante_y = y - 5; break;
+        case 69: lanzar_cohete(); break;
     }
-    shante.style.left = x + "px";
-    
-    if (event.keyCode == 65){
-        console.log("Me moveré 5 pixeles a la izquierda")
-        x = x - 5;
-    }
-    shante.style.left = x - "px";
 
-    if (event.keyCode == 87){
-        console.log("Me moveré 5 pixeles arriba")
-        y = y + 5;
+    if (shante_x >= 0 && shante_x <= pantalla_ancho - shante_ancho) {
+        x = shante_x;
+        shante.style.left = x + "px";
     }
-    shante.style.top = y + "px";
 
-    if (event.keyCode == 83){
-        console.log("Me moveré 5 pixeles abajo")
-        y = y - 5;
+    if (shante_y >= 0 && shante_y <= pantalla_alto - shante_alto) {
+        y = shante_y;
+        shante.style.top = y + "px";
     }
-    shante.style.top = y - "px";
-    // se ha modificado
 }
 
+function lanzar_cohete() {
+    let nuevoCohete = document.createElement("img");
+    nuevoCohete.setAttribute("id", "cohete");
+    nuevoCohete.style.left = (x + shante_ancho) + "px";
+    nuevoCohete.style.top = (y + shante_alto / 2) + "px";
 
-// shante.setAttribute("src","img/Vidas/heart_1.png")
+    document.body.appendChild(nuevoCohete);
+
+    cambiar_imagen_cohete(nuevoCohete)
+}
+
+function cambiar_imagen_cohete(nuevoCohete){
+    let cohete_x = x + shante_ancho;
+    let num_imagen_cohete = 1;
+    const cohete_ancho = nuevoCohete.offsetWidth;
+
+    let animacion_cohete = setInterval(() => {
+        cohete_x += 10;
+        nuevoCohete.style.left = cohete_x + "px";
+
+        num_imagen_cohete++;
+        if (num_imagen_cohete > 4) {
+            num_imagen_cohete = 1;
+        }
+        nuevoCohete.src = "img/HannyahNED/Cohete_" + num_imagen_cohete + ".png";
+
+        if (cohete_x >= pantalla_ancho - cohete_ancho) {
+            clearInterval(animacion_cohete);
+            nuevoCohete.remove();
+        }
+    }, 50);
+}
